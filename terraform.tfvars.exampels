@@ -1,0 +1,5 @@
+jira_api_token    = "your_api_token"
+jira_host_name    = "your_domain.atlassian.net"
+jira_project_name = "YOUR_PROJECT"
+jira_user_name    = "your_email@example.com"
+region            = "us-east-2"
