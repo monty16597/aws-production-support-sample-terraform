@@ -5,13 +5,6 @@ JIRA_DIR := $(LAMBDA_DIR)/jira_issue
 CREATE_USER_DIR := $(LAMBDA_DIR)/create-user
 
 init-lambda:
-	@echo "Building jira_issue lambda..."
-	@ ( \
-		cd "$(JIRA_DIR)" && \
-		rm -rf build.zip __pycache__ *.pyc *.pyo && \
-		python3 -m pip install -r requirements.txt -t . && \
-		zip -r -q build.zip . -x "__pycache__/*" "*.pyc" "*.pyo" ".DS_Store" \
-	)
 	@echo "Building create-user lambda..."
 	@ ( \
 		cd "$(CREATE_USER_DIR)" && \
