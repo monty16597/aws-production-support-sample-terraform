@@ -109,7 +109,7 @@ def handler(event, context):
             "request_id": request_id, "error": str(e),
             "function_name": function_name,
         }})
-        return _response(500, {"error": "Failed to write to DynamoDB"})
+        raise Exception("Failed to create user") from e
     latency_ms = int((time.time() - start) * 1000)
     logger.info("request_completed", extra={"extra": {
         "request_id": request_id, "status": 201, "latency_ms": latency_ms

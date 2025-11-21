@@ -10,8 +10,16 @@ terraform {
       version = "~> 3.6"
     }
   }
+  backend "s3" {
+    bucket       = "opsfabric-terraform-states"
+    key          = "sample-project/terraform.tfstate"
+    region       = "ca-central-1"
+    profile      = "vaishal"
+    use_lockfile = true
+  }
 }
 
 provider "aws" {
-  region = var.region
+  region  = var.region
+  profile = "vaishal"
 }

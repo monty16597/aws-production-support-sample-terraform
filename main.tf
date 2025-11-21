@@ -92,8 +92,3 @@ output "lambda_function_url" {
   value       = aws_lambda_function_url.fn_url.function_url
   description = "Public Function URL for POST requests"
 }
-
-
-resource "aws_sns_topic" "alarm_topic" {
-  name = "${var.project}-alarms"
-}
