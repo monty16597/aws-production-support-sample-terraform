@@ -1,0 +1,3 @@
+[submodule "sample-project"]
+	path = sample-project
+	url = git@github.com:monty16597/sample-project-lambda-code.git
