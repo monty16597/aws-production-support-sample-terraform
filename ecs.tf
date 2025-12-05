@@ -121,7 +121,13 @@ resource "aws_lb_listener" "nginx_http" {
 # ECS Task Definition
 #########################
 
+resource "aws_cloudwatch_log_group" "nginx_task" {
+  name              = "/ecs/${var.project}-nginx"
+  retention_in_days = 7
+}
+
 resource "aws_ecs_task_definition" "nginx_task" {
+
   family                   = "${var.project}-nginx"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -142,8 +148,19 @@ resource "aws_ecs_task_definition" "nginx_task" {
           protocol      = "tcp"
         }
       ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.nginx_task.name
+          awslogs-region        = data.aws_region.current.name
+          awslogs-stream-prefix = "ecs"
+        }
+      }
     }
   ])
+
+
 }
 
 #########################
