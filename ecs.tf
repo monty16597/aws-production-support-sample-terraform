@@ -77,45 +77,45 @@ resource "aws_security_group" "ecs_service_sg" {
   }
 }
 
-# Public ALB in default VPC
-resource "aws_lb" "nginx_alb" {
-  name               = "${var.project}-alb"
-  load_balancer_type = "application"
-  internal           = false
+# # Public ALB in default VPC
+# resource "aws_lb" "nginx_alb" {
+#   name               = "${var.project}-alb"
+#   load_balancer_type = "application"
+#   internal           = false
 
-  security_groups = [aws_security_group.alb_sg.id]
-  subnets         = data.aws_subnets.default.ids
-}
+#   security_groups = [aws_security_group.alb_sg.id]
+#   subnets         = data.aws_subnets.default.ids
+# }
 
-# Target group for ECS service
-resource "aws_lb_target_group" "nginx_tg" {
-  name        = "nginx-tg"
-  port        = 80
-  protocol    = "HTTP"
-  target_type = "ip"
-  vpc_id      = data.aws_vpc.default.id
+# # Target group for ECS service
+# resource "aws_lb_target_group" "nginx_tg" {
+#   name        = "nginx-tg"
+#   port        = 80
+#   protocol    = "HTTP"
+#   target_type = "ip"
+#   vpc_id      = data.aws_vpc.default.id
 
-  health_check {
-    path                = "/"
-    matcher             = "200-399"
-    interval            = 30
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-  }
-}
+#   health_check {
+#     path                = "/"
+#     matcher             = "200-399"
+#     interval            = 30
+#     timeout             = 5
+#     healthy_threshold   = 2
+#     unhealthy_threshold = 2
+#   }
+# }
 
-# HTTP :80 listener
-resource "aws_lb_listener" "nginx_http" {
-  load_balancer_arn = aws_lb.nginx_alb.arn
-  port              = 80
-  protocol          = "HTTP"
+# # HTTP :80 listener
+# resource "aws_lb_listener" "nginx_http" {
+#   load_balancer_arn = aws_lb.nginx_alb.arn
+#   port              = 80
+#   protocol          = "HTTP"
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.nginx_tg.arn
-  }
-}
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.nginx_tg.arn
+#   }
+# }
 
 #########################
 # ECS Task Definition
@@ -167,35 +167,35 @@ resource "aws_ecs_task_definition" "nginx_task" {
 # ECS Service
 #########################
 
-resource "aws_ecs_service" "nginx_service" {
-  name            = "nginx"
-  cluster         = aws_ecs_cluster.nginx_cluster.id
-  task_definition = aws_ecs_task_definition.nginx_task.arn
-  desired_count   = 0
-  launch_type     = "FARGATE"
+# resource "aws_ecs_service" "nginx_service" {
+#   name            = "nginx"
+#   cluster         = aws_ecs_cluster.nginx_cluster.id
+#   task_definition = aws_ecs_task_definition.nginx_task.arn
+#   desired_count   = 0
+#   launch_type     = "FARGATE"
 
-  network_configuration {
-    assign_public_ip = true
-    subnets          = data.aws_subnets.default.ids
-    security_groups  = [aws_security_group.ecs_service_sg.id]
-  }
+#   network_configuration {
+#     assign_public_ip = true
+#     subnets          = data.aws_subnets.default.ids
+#     security_groups  = [aws_security_group.ecs_service_sg.id]
+#   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.nginx_tg.arn
-    container_name   = "nginx"
-    container_port   = 80
-  }
+#   load_balancer {
+#     target_group_arn = aws_lb_target_group.nginx_tg.arn
+#     container_name   = "nginx"
+#     container_port   = 80
+#   }
 
-  depends_on = [
-    aws_lb_listener.nginx_http
-  ]
-}
+#   depends_on = [
+#     aws_lb_listener.nginx_http
+#   ]
+# }
 
-#########################
-# Useful Outputs
-#########################
+# #########################
+# # Useful Outputs
+# #########################
 
-output "nginx_alb_dns_name" {
-  description = "Public DNS name of the ALB"
-  value       = aws_lb.nginx_alb.dns_name
-}
+# output "nginx_alb_dns_name" {
+#   description = "Public DNS name of the ALB"
+#   value       = aws_lb.nginx_alb.dns_name
+# }
