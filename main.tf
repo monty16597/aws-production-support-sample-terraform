@@ -69,12 +69,6 @@ resource "aws_iam_policy" "ddb_read_policy" {
   policy = data.aws_iam_policy_document.ddb_read.json
 }
 
-# Attach custom policies to Lambda execution role
-resource "aws_iam_role_policy_attachment" "ddb_put_attach" {
-  role       = aws_iam_role.lambda_exec_role.name
-  policy_arn = aws_iam_policy.ddb_put_policy.arn
-}
-
 resource "aws_iam_role_policy_attachment" "ddb_read_attach" {
   role       = aws_iam_role.lambda_exec_role.name
   policy_arn = aws_iam_policy.ddb_read_policy.arn
